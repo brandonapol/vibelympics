@@ -1,0 +1,347 @@
+.sudoku-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sudoku-container h1 {
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 2.5em;
+}
+
+/* Game Layout - Desktop: side by side, Mobile: vertical */
+.game-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Theme Selector */
+.theme-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-btn {
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  border: 3px solid #ddd;
+  background-color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+  border-color: #2196f3;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.theme-btn.active {
+  border-color: #2196f3;
+  background-color: #e3f2fd;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+  transform: scale(1.05);
+}
+
+/* Special styling for the octopus/Linky theme button */
+.theme-btn:last-child {
+  border-color: #ff9800;
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe0b2 100%);
+}
+
+.theme-btn:last-child:hover {
+  border-color: #ff6f00;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.5);
+  background: linear-gradient(135deg, #fff9e6 0%, #ffcc80 100%);
+}
+
+.theme-btn:last-child.active {
+  border-color: #ff6f00;
+  background: linear-gradient(135deg, #ffe0b2 0%, #ffb74d 100%);
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.3), 0 0 20px rgba(255, 152, 0, 0.4);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1.05);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.grid-section {
+  flex-shrink: 0;
+}
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 280px;
+  max-width: 320px;
+}
+
+.sudoku-grid {
+  display: inline-block;
+  border: 3px solid #000;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sudoku-row {
+  display: flex;
+}
+
+.sudoku-cell {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.sudoku-cell:hover {
+  background-color: #e8f4f8;
+}
+
+.sudoku-cell.selected {
+  background-color: #bbdefb;
+  outline: 2px solid #2196f3;
+  outline-offset: -2px;
+}
+
+.sudoku-cell.right-border {
+  border-right: 3px solid #000;
+}
+
+.sudoku-cell.bottom-border {
+  border-bottom: 3px solid #000;
+}
+
+/* Given cells (initial puzzle numbers) */
+.sudoku-cell.given {
+  background-color: #f5f5f5;
+  font-weight: 900;
+  color: #000;
+}
+
+.sudoku-cell.given:hover {
+  background-color: #f5f5f5;
+  cursor: default;
+}
+
+/* User-filled cells */
+.sudoku-cell.user-filled {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+/* Conflict cells (cells with duplicate numbers) */
+.sudoku-cell.conflict {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.sudoku-cell.conflict:hover {
+  background-color: #ffcdd2;
+}
+
+.sudoku-cell.conflict.selected {
+  background-color: #ef9a9a;
+  outline: 2px solid #c62828;
+  outline-offset: -2px;
+}
+
+/* Given cells that have conflicts (shouldn't happen, but just in case) */
+.sudoku-cell.given.conflict {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Highlight cells in same row/column as selected cell */
+.sudoku-cell.highlighted-cross {
+  background-color: #e3f2fd;
+}
+
+.sudoku-cell.highlighted-cross:hover {
+  background-color: #bbdefb;
+}
+
+/* Don't override conflict highlighting with row/column highlight */
+.sudoku-cell.conflict.highlighted-cross {
+  background-color: #ffebee;
+}
+
+/* Highlight cells with same number as selected cell */
+.sudoku-cell.same-number {
+  background-color: #c5e1a5;
+}
+
+.sudoku-cell.same-number:hover {
+  background-color: #aed581;
+}
+
+/* Same number takes precedence over row/column highlight */
+.sudoku-cell.same-number.highlighted-cross {
+  background-color: #c5e1a5;
+}
+
+/* Don't override conflict highlighting with same-number highlight */
+.sudoku-cell.conflict.same-number {
+  background-color: #ffebee;
+}
+
+/* Game Controls */
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.control-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 2px solid #2196f3;
+  background-color: #fff;
+  color: #2196f3;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.control-btn:hover:not(:disabled) {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.control-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #ccc;
+}
+
+/* Number Pad */
+.number-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.number-btn {
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #4caf50;
+  background-color: #fff;
+  color: #4caf50;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.number-btn:hover:not(:disabled) {
+  background-color: #4caf50;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.number-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.number-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #ccc;
+}
+
+.number-btn.clear-btn {
+  grid-column: span 3;
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.number-btn.clear-btn:hover:not(:disabled) {
+  background-color: #f44336;
+  color: #fff;
+}
+
+/* Mobile Responsive Layout */
+@media (max-width: 768px) {
+  .game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .theme-selector {
+    flex-direction: row;
+    width: 100%;
+    max-width: 500px;
+    justify-content: center;
+  }
+
+  .theme-btn {
+    width: 55px;
+    height: 55px;
+    font-size: 28px;
+  }
+
+  .controls-section {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .game-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .control-btn {
+    flex: 1 1 auto;
+    min-width: 120px;
+  }
+
+  .number-pad {
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 500px;
+  }
+
+  .number-btn.clear-btn {
+    grid-column: span 2;
+  }
+}
