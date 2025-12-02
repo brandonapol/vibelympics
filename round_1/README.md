@@ -20,6 +20,30 @@ A fun, emoji-themed Sudoku game built with React and TypeScript. Choose from fiv
 ## Prerequisites
 
 - Node.js 18+ or Docker
+- Make (optional, for easier commands)
+
+## 🚀 Quick Start (Easiest Way)
+
+```bash
+cd sudoku-app
+make build
+make run
+```
+
+Visit `http://localhost:3000` and enjoy! 🐙
+
+### All Make Commands:
+```bash
+make help      # Show all available commands
+make build     # Build Docker image
+make run       # Run the app
+make stop      # Stop the app
+make restart   # Restart the app
+make clean     # Clean up everything
+make dev       # Run in dev mode (no Docker)
+make logs      # View logs
+make test      # Run tests
+```
 
 ## Local Development
 
@@ -53,6 +77,8 @@ npm test
 
 ## Docker Instructions
 
+*Tip: Use `make build` and `make run` for easier commands! See Quick Start above.*
+
 ### Build the Docker image
 ```bash
 cd sudoku-app
@@ -61,10 +87,12 @@ docker build -t emoji-sudoku:latest .
 
 ### Run the container
 ```bash
-docker run -p 3000:3000 emoji-sudoku:latest
+docker run -p 3000:8080 emoji-sudoku:latest
 ```
 
 The app will be available at `http://localhost:3000`
+
+*Note: The container runs nginx on port 8080 internally, mapped to 3000 on your host*
 
 ### Using Docker Compose (optional)
 
@@ -76,7 +104,7 @@ services:
   sudoku-app:
     build: ./sudoku-app
     ports:
-      - "3000:3000"
+      - "3000:8080"
     restart: unless-stopped
 ```
 

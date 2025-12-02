@@ -1,10 +1,10 @@
 # Build stage
-FROM cgr.dev/chainguard/node:latest AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm ci
@@ -15,22 +15,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Production stage
-FROM cgr.dev/chainguard/node:latest
+# Production stage - use Chainguard nginx
+FROM cgr.dev/chainguard/nginx:latest
 
-WORKDIR /app
+# Copy built files to nginx html directory
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy package files for production dependencies
-COPY package*.json ./
-
-# Install only production dependencies and add serve globally
-RUN npm ci --production && npm install -g serve
-
-# Copy built assets from builder stage
-COPY --from=builder /app/dist ./dist
-
-# Expose port 3000
-EXPOSE 3000
-
-# Run the application
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Chainguard nginx runs on port 8080 by default
+EXPOSE 8080

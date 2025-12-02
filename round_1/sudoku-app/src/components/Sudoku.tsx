@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { generateSudokuPuzzle, generateSolvedSudoku } from '../utils/sudokuGenerator';
+import { generateSolvedSudoku } from '../utils/sudokuGenerator';
 import './Sudoku.css';
 
 type Cell = number | null;
@@ -217,19 +217,6 @@ const Sudoku = () => {
     setGrid(newGrid);
     setConflicts(detectConflicts(newGrid));
     setMoveHistory(moveHistory.slice(0, -1));
-  };
-
-  const handleClear = () => {
-    // Clear all user-filled cells
-    const clearedGrid = grid.map((row, rowIndex) =>
-      row.map((cell, colIndex) =>
-        givenCells[rowIndex][colIndex] ? cell : null
-      )
-    );
-
-    setGrid(clearedGrid);
-    setConflicts(Array(9).fill(null).map(() => Array(9).fill(false)));
-    setMoveHistory([]);
   };
 
   const handleHint = () => {
